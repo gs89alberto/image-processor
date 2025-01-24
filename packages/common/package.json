@@ -5,6 +5,7 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "express-validator": "^7.2.1"
   }
 }
