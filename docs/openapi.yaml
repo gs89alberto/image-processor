@@ -1,0 +1,212 @@
+openapi: 3.0.3
+info:
+  title: Image Processor API
+  description: API for creating image-processing tasks and retrieving their status and processed images.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+paths:
+  /tasks:
+    post:
+      summary: Create a new image-processing task
+      description: |
+        Creates a new task to process an image.  
+        The task is initialized with a random price and a 'pending' status.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Task successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTaskResponse'
+        '400':
+          description: Bad request (validation errors or missing fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /tasks/{taskId}:
+    get:
+      summary: Retrieve the status and details of a specific task
+      description: |
+        Returns the status (pending, completed, or failed), the assigned price,
+        and if completed, an array of processed images.
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          description: The ID of the task to retrieve
+          schema:
+            type: string
+            example: 65d4a54b89c5e342b2c2c5f6
+      responses:
+        '200':
+          description: Task details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDetails'
+        '400':
+          description: Bad request (validation errors or missing fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorNotFoundResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+components:
+  schemas:
+    CreateTaskRequest:
+      type: object
+      properties:
+        originalPath:
+          type: string
+          description: Local path or URL of the image to be processed
+          example: "./input/image1.jpg"
+      required:
+        - originalPath
+
+    CreateTaskResponse:
+      type: object
+      properties:
+        taskId:
+          type: string
+          description: Unique identifier of the newly created task
+          example: "65d4a54b89c5e342b2c2c5f6"
+        status:
+          type: string
+          description: Initial status of the created task
+          enum: [PENDING, COMPLETED, FAILED]
+          example: "PENDING"
+        price:
+          type: number
+          description: Randomly assigned price for the task
+          example: 25.5
+
+    TaskDetails:
+      type: object
+      properties:
+        taskId:
+          type: string
+          description: Unique identifier of the task
+          example: "65d4a54b89c5e342b2c2c5f6"
+        status:
+          type: string
+          description: Current status of the task
+          enum: [PENDING, COMPLETED, FAILED]
+          example: "COMPLETED"
+        price:
+          type: number
+          description: Price assigned to the task
+          example: 25.5
+        images:
+          type: array
+          description: Array of processed images if the task is completed
+          items:
+            $ref: '#/components/schemas/ImageDetails'
+      required:
+        - taskId
+        - status
+        - price
+
+    ImageDetails:
+      type: object
+      properties:
+        resolution:
+          type: string
+          description: Width of the processed image (e.g., "1024", "800")
+          example: "1024"
+        path:
+          type: string
+          description: File path where the processed image is stored
+          example: "/output/image1/1024/f322b730b287.jpg"
+
+    ErrorNotFoundResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: General error message
+          example: "Resource not found"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              param:
+                type: string
+                description: The parameter that caused the error
+              msg:
+                type: string
+                description: The error message
+              value:
+                type: string
+                description: The incorrect value
+      required:
+        - message
+
+    BadRequestError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A short description of the reason for the bad request
+          example: "Validation Error"
+        errors:
+          type: array
+          description: A list of validation issues or reasons for the error
+          items:
+            type: object
+            properties:
+              param:
+                type: string
+                description: The parameter that caused the error
+              msg:
+                type: string
+                description: The error message
+              value:
+                type: string
+                description: The input value that triggered the error
+      required:
+        - message
+
+    InternalServerError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Short description of the server error
+          example: "Internal Server Error"
+        details:
+          type: string
+          description: Additional details about the server error
+          example: "Unexpected error"
+      required:
+        - message
