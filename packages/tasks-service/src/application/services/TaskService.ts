@@ -3,6 +3,7 @@ import { Task } from '../../domain/entities/Task';
 import { generateRandomPrice } from 'common/src/utils';
 import { TASK_STATUS } from 'common/src/constants';
 import { CreateTaskDto, ProcessedImageDto, TaskResultDto } from 'common/src/dtos';
+import { sendTaskToQueue } from '../../infrastructure/kafka/TaskCreatedProducer';
 import { NotFoundError } from 'common/src/utils/errors';
 
 export class TaskService {
@@ -14,6 +15,7 @@ export class TaskService {
       originalPath: input.originalPath,
     };
     const createdTask = await this.taskRepository.createTask(taskData);
+    sendTaskToQueue(createdTask.id, createdTask.originalPath);
     return {
       taskId: createdTask.id,
       status: createdTask.status,
