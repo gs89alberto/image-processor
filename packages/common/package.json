@@ -9,8 +9,5 @@
     "winston": "^3.17.0",
     "express-validator": "^7.2.1",
     "express-rate-limit": "^7.5.0"
-  },
-  "devDependencies": {
-    "@types/axios": "^0.14.4"
   }
 }

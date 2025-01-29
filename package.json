@@ -8,7 +8,12 @@
     "packages/images-service"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:tasks": "npm run dev -w tasks-service",
+    "start:images": "npm run dev -w images-service",
+    "start:all": "npm run start:tasks & npm run start:images",
+    "start:all:test": "npm run dev:test -w tasks-service & npm run dev:test -w images-service",
+    "test:tasks": "npm run test -w tasks-service",
+    "docker:up": "docker-compose up -d"
   },
   "dependencies": {
     "express": "^4.21.2"

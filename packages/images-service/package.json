@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "src/main.ts",
   "scripts": {
-    "dev": "ts-node src/main.ts"
+    "dev": "ts-node src/main.ts",
+    "dev:test": "NODE_ENV=test ts-node src/main.ts"
   },
   "dependencies": {
     "common": "1.0.0",
