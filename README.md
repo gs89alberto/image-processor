@@ -13,9 +13,9 @@ Below, you will find installation instructions, execution steps, API documentati
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 - [Image Processing API](#image-processing-api)
-  - [📋 Table of Contents](#-table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [1. Prerequisites](#1-prerequisites)
   - [2. Installation](#2-installation)
     - [Install Docker](#install-docker)
@@ -27,11 +27,9 @@ Below, you will find installation instructions, execution steps, API documentati
       - [2. `GET /tasks/:taskId`](#2-get-taskstaskid)
   - [5. Running Tests (Unit and Integration)](#5-running-tests-unit-and-integration)
     - [Running Unit and Integration Tests (Tasks)](#running-unit-and-integration-tests-tasks)
-    - [Running Performance Tests with k6](#running-performance-tests-with-k6)
-  - [Running Performance Tests with k6](#running-performance-tests-with-k6-1)
+  - [6. Running Performance Tests with k6](#6-running-performance-tests-with-k6)
     - [1. Start the Server in Test Mode](#1-start-the-server-in-test-mode)
-    - [2. Navigate to the `tasks-service` Directory](#2-navigate-to-the-tasks-service-directory)
-    - [3. Execute Performance Tests for Task Creation](#3-execute-performance-tests-for-task-creation)
+    - [2. Execute Performance Tests for Task Creation](#2-execute-performance-tests-for-task-creation)
 
 ## 1. Prerequisites
 - Node.js v18+
@@ -125,7 +123,7 @@ The tasks microservice exposes two main endpoints:
     ]
   }
   ```
-  ---
+---
 
 ## 5. Running Tests (Unit and Integration)
 
@@ -138,9 +136,7 @@ npm run test:tasks
 ```
 ---
 
-### Running Performance Tests with k6
-
-## Running Performance Tests with k6
+## 6. Running Performance Tests with k6
 
 To run **performance tests** using **k6**, follow these steps:
 
@@ -152,18 +148,13 @@ Before running performance tests, the server must be started in **test mode**:
 npm run start:all:test
 ```
 
-### 2. Navigate to the `tasks-service` Directory
-
-```bash
-cd packages/tasks-service/
-```
-
-### 3. Execute Performance Tests for Task Creation
+### 2. Execute Performance Tests for Task Creation
 
 Run the specific performance tests using k6:
 ```bash
-	•	npm run test:perf1  #Simulates a failure scenario when creating a task.
-	•	npm run test:perf2  #Tests performance when the originalPath is a local file path.
-	•	npm run test:perf3  #Tests performance when the originalPath is a remote URL.
+cd packages/tasks-service/ #Navigate to the `tasks-service` Directory
+npm run test:perf1  #Simulates a failure scenario when creating a task.
+npm run test:perf2  #Tests performance when creating a task and the originalPath is a local path.
+npm run test:perf3  #Tests performance when creating a task and the originalPath is a remote URL.
 ```
 Each k6 test sends multiple requests to the POST /tasks endpoint under different conditions, measuring performance and response time.
