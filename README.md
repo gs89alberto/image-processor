@@ -97,7 +97,7 @@ The tasks microservice exposes two main endpoints:
   ```json
   {
     "taskId": "65d4a54b89c5e342b2c2c5f6",
-    "status": "pending",
+    "status": "PENDING",
     "price": 25.5
   }
   ```
