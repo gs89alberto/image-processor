@@ -11,11 +11,17 @@ export async function startTaskProcessedConsumer(taskService: TaskService): Prom
   await consumer.run({
     eachMessage: async ({ message }) => {
       try {
-        const { taskId, images } = JSON.parse(message.value?.toString() || '{}');
-        await taskService.markTaskCompleted(taskId, images);
-        logger.info(`[tasks-service] Task ${taskId} marked as COMPLETED`);
-      } catch (error) {
-        logger.error('[tasks-service] Error in TaskProcessedConsumer:', error);
+        const parsedMessage = JSON.parse(message.value?.toString() || '{}');
+        const { taskId, images, error } = parsedMessage;
+        if (error) {
+          await taskService.markTaskFailed(taskId, error);
+          logger.error(`[tasks-service] Task ${taskId} marked as FAILED, reason: ${error}`);
+        } else {
+          await taskService.markTaskCompleted(taskId, images);
+          logger.info(`[tasks-service] Task ${taskId} marked as COMPLETED`);
+        }
+      } catch (err) {
+        logger.error('[tasks-service] Error processing message in TaskProcessedConsumer:', err);
       }
     },
   });

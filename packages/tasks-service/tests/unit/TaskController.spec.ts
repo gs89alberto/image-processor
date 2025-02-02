@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { TaskController } from '../../src/infrastructure/interface/controllers/TaskController';
 import { TaskService } from '../../src/application/services/TaskService';
-import { NotFoundError } from 'common/src/utils/errors';
 import { TASK_STATUS } from 'common/src/constants';
 
 describe('TaskController Unit Tests', () => {

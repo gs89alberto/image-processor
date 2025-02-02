@@ -9,5 +9,4 @@ export enum TASK_STATUS {
 export const KAFKA_TOPICS = {
   TASK_CREATED: 'task-created',
   TASK_PROCESSED: 'task-processed',
-  TASK_FAILED: 'task-failed',
 };
