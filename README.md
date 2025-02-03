@@ -54,7 +54,7 @@ npm install
 ```
 ### Environment Setup
 
-Create a `.env` file at tasks-service and images-service project root to provide environment variables. For example:
+Create a `.env` file in the tasks-service and images-service project root directory to provide environment variables or simply rename the file `.env.example` file to `.env`. For example:
 
 ```plaintext
 MONGODB_URI=mongodb://localhost:27017/image-processor-db
